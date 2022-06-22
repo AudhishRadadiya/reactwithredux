@@ -36,3 +36,27 @@
     transform: rotate(360deg);
   }
 }
+
+
+.table{
+  margin: auto;
+  width: 95% !important;
+  border-radius: 10px !important; 
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
+}
+.searchBox{
+  margin-top: 10px;
+  margin-bottom: 60px;
+  justify-content: center;
+  display: flex;
+}
+.pagination{
+  display: flex;
+  justify-content: end;
+  margin: 10px 0;
+  margin-right: 24px;
+}
+
+.Action_btn{
+  margin-right: 3px !important;
+}

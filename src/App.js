@@ -1,25 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useState} from 'react';
+import Routes from './Components/Routes';
+import Modelcontext from './Components/Modelcontext';
 
-function App() {
+export const App = () => {
+
+  const [edit, setEdit] = useState({});
+  const [open, setOpen] = useState(false);
+
+  const modelValue = {
+    open, 
+    setOpen,
+    edit, 
+    setEdit,
+    // handleOpen, 
+    // handleClose, 
+    //updateRecord, 
+    // handleValueChange, 
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+      <Modelcontext.Provider value={modelValue}> 
+        <Routes/>
+      </Modelcontext.Provider>
+    </>
+  )
 }
-
 export default App;
