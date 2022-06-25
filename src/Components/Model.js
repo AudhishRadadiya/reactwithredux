@@ -5,7 +5,7 @@ import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import { useSelector, useDispatch } from "react-redux";
 import { MODEL_EDIT } from "../Components/redux/types";
-import Modelcontext from './Modelcontext';
+import modelContext from './Modelcontext';
 
 const Model = (props) => {
 
@@ -21,26 +21,24 @@ const Model = (props) => {
       p: 4,
     };
     
-    const [update, setUpadet] = useState({})
+    const [update, setUpdate] = useState({})
 
     // const {edit,open,handleOpen,handleClose,setEdit,updateRecord}=props
     const {handleClose, updateRecord} = props;
-    const { edit, open, setEdit} = useContext(Modelcontext);
+    const { edit, open, setEdit} = useContext(modelContext);
     
     const { model_open, edit_data } = useSelector(val => val.table)
-    const dispatch = useDispatch()
     console.log("update",update)
 
     useEffect(() => {
   
-      setUpadet(edit_data)
+      setUpdate(edit_data)
   
     },[edit_data])
   
  
     const handleChange = (e) => {        
-      setUpadet({...update,[e.target.id]:e.target.value})
-      // dispatch(({ type:MODEL_EDIT, payload:e.target.value}))
+      setUpdate({...update,[e.target.id]:e.target.value})
     }
  
     return (

@@ -21,7 +21,6 @@ const initialState ={
 }
 
 export default function tableReducer (state = initialState, action){
-    console.log("action",action)
     switch (action.type) {       
         case GET_USER_DATA:
           return {

@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import Routes from './Components/Routes';
-import Modelcontext from './Components/Modelcontext';
+import Routes from './Routes';
+import modelContext from './Components/Modelcontext';
 
 export const App = () => {
 
@@ -12,16 +12,14 @@ export const App = () => {
     setOpen,
     edit, 
     setEdit,
-    // handleOpen, 
-    // handleClose, 
-    //updateRecord, 
-    // handleValueChange, 
   }
+
+  console.log("provider")
   return (
     <>
-      <Modelcontext.Provider value={modelValue}> 
+      <modelContext.Provider value={modelValue}> 
         <Routes/>
-      </Modelcontext.Provider>
+      </modelContext.Provider>
     </>
   )
 }

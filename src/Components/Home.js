@@ -1,4 +1,5 @@
 import "../App.css";
+import axios from 'axios';
 import React, { useState, useEffect, useContext } from "react";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -7,17 +8,18 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import axios from 'axios';
 import Button from '@mui/material/Button';
 import Model from "./Model";
 import TextField from '@mui/material/TextField';
 import TablePagination from '@mui/material/TablePagination';
-import Modelcontext from "./Modelcontext";
+import modelContext from "./Modelcontext";
 // import Pagination from "./Components/Pagination";
 // export const MyContext = React.createContext();
 import { useSelector, useDispatch } from "react-redux";
 import { getData, updatedData, deleteData } from "./redux/TableSlice";
-import { MODEL_OPEN, MODEL_EDIT, GET_USER_DATA } from "./redux/types"
+import { MODEL_OPEN, MODEL_EDIT, GET_USER_DATA } from "./redux/types";
+import { useHistory } from "react-router-dom";
+import client from "./graphql/Helper";
 
 
 function Home() {
@@ -27,15 +29,19 @@ function Home() {
   const [search, setSearch] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [page, setPage] = useState(0)
+
   //   const [edit, setEdit] = useState({});
   //   const [delete, setDelete] = useState({});
   //   const [open, setOpen] = useState(false);
 
+  console.log("client",client)  
 
-  const { setOpen, edit, setEdit } = useContext(Modelcontext)
+  const { setOpen, edit, setEdit } = useContext(modelContext)
 
   const { user_data, edit_data, row_data } = useSelector(val => val.table)
   const dispatch = useDispatch();
+
+  const history = useHistory();
 
   // const handleOpen = () => {setOpen(true)}
   // const handleClose = () => {setEdit(true)}
@@ -100,22 +106,22 @@ function Home() {
 
     if (e.target.value.length > 0) {
       let result = user_data.filter(o => o.title.includes(e.target.value));
-      // setData(result);
       dispatch({ type:GET_USER_DATA, payload:result})
+      // setData(result);
     }
     else if (e.target.value === "" || e.target.value.length === 0) {
-      // setData(rowData)
       dispatch({ type:GET_USER_DATA, payload: row_data})
+      // setData(rowData)
     }
   }
 
   const handleChangePage = (event, newPage) => {
+    console.log("newPage",event,newPage)
     setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (event) => {
     console.log("newPage", event)
-
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
@@ -178,6 +184,8 @@ function Home() {
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
+      {/* <button onClick={() => history.push("/about/123456/xyz", {frm: "HomePage"})}>GO ABOUT PAGE</button> */}
+      <button onClick={() => history.push("/about/123456/xyz", {frm: "HomePage"})}>GO ABOUT PAGE</button>
       </TableContainer>
 
       <Model updateRecord={updateRecord} handleClose={handleClose} />

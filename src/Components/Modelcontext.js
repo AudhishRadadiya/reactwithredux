@@ -1,6 +1,6 @@
-import { createContext,  } from 'react'
+import { createContext } from 'react';
 
-const Modelcontext = createContext ({
+const modelContext = createContext ({
     open : false,
     edit : {
         id: null,
@@ -8,7 +8,9 @@ const Modelcontext = createContext ({
         title: "",
         body: ""
     }, 
+    setOpen: () => {},
     setEdit: () => {},
 });
+console.log("modelContext");
 
-export default Modelcontext;  
+export default modelContext;  
