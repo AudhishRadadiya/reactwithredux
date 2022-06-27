@@ -9,14 +9,21 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 // import { useHistory } from "react-router-dom";
-import { GETALLPOSTS } from './query';
 import { useMutation, useQuery, gql } from '@apollo/client';
 import client from './Helper';
 import Submodel from '../Submodel';
 import { useDispatch } from "react-redux";
 import { MODEL_OPEN, MODEL_EDIT } from "../redux/types";
 // import {  } from '@apollo/client';
-import { CREATEPOST, UPDATEDATA, DELETE_DATA } from "../graphql/mutation";
+import { GETALLPOSTS, GET_ALLALBUMS, GETALBUM } from './query';
+import { 
+  CREATEPOST, 
+  UPDATEDATA, 
+  DELETE_DATA, 
+  CREATE_ALBUM, 
+  UPDATE_ALBUM, 
+  DELETE_ALBUM 
+} from "../graphql/mutation";
 
 
 function GraphPage() {
@@ -39,7 +46,25 @@ function GraphPage() {
     },
   });
 
-  console.log("data....",data)
+  const { data: getAlbum } = useQuery(GETALBUM,{
+    variables: {
+      id: "1"
+    }
+  })
+
+  const { data: getAllalbum } = useQuery(GET_ALLALBUMS,{
+    variables: {
+      options: {
+        paginate : {
+          page: 1,
+          limit: 20
+        }
+      }
+    }
+  })
+
+  console.log("getAlbum....",getAlbum)
+  console.log("getAllalbum....",getAllalbum)
 
   const [createPost, { data: createPosts }] = useMutation(CREATEPOST, {
     variables: {
@@ -64,6 +89,94 @@ function GraphPage() {
   
   const [deletePost, { data: deletePosts }] = useMutation(DELETE_DATA)
 
+  const deletePostById = (id) => {
+    deletePost(
+      {
+        variables : {
+          id
+        }
+      }
+    )
+
+    client
+    .mutate({
+      mutation: DELETE_ALBUM,
+      variables: {
+        id: "1"
+      }
+    }).then((res) => {
+      console.log("response of DELETE_ALBUM",res)
+    })
+  }
+
+  const [createAlbum, { data: createAlbums}] = useMutation(CREATE_ALBUM)
+  // ,{
+  //   variables: {
+  //     input:{
+  //       title: "abc",
+  //       userId: "1"
+  //     }
+  //   }
+  // })
+
+  const Createalbums = () => {
+    client
+    .mutate({
+      mutation: CREATE_ALBUM,
+      variables: {
+        input: {
+          title: "",
+          userId: "1" 
+        }
+      }
+    }).then((res) => {
+      console.log("responce of CREATE_ALBUM",res)
+    })
+
+    // createAlbum(
+    //   {
+    //     variables: {
+    //       input: {
+    //         title: "",
+    //         userId: "5"
+    //       }
+    //     }
+    //   }
+    // )
+  }
+
+  const [updateAlbum, { data: updateAlbums}] = useMutation(UPDATE_ALBUM)
+  //   ,{
+  //   variables: {
+  //     id: "",
+  //     input: {
+  //       title: "",
+  //       userId: "3"
+  //     }
+  //   }
+  // })
+  const updateAlbumById = () => {
+    client
+    .mutate({
+      mutation : UPDATE_ALBUM,
+      variables : {
+        id: "1",
+        input: {
+          title: "",
+          userId: 5
+        }
+      }
+    }).then((res) => {
+      console.log("response of UPDATE_ALBUM",res)
+    })
+  }
+
+
+  const [deleteAlbum, { data: deleteAlbums}] = useMutation(DELETE_ALBUM)
+
+
+
+
   const dispatch = useDispatch();
 
   const handleOpen = () => {
@@ -76,16 +189,6 @@ function GraphPage() {
   const handleEdit = (item) => {
     handleOpen()
     dispatch({ type: MODEL_EDIT, payload: item })
-  }
-
-  const deletePostById = (id) => {
-    deletePost(
-      {
-        variables : {
-          id
-        }
-      }
-    )
   }
 
   // const updatePostById = (data) => {
@@ -124,6 +227,7 @@ function GraphPage() {
      }
     )
    // updatePostById(update)
+   updateAlbumById()
   }
 
   return (
@@ -131,6 +235,9 @@ function GraphPage() {
       <div>
         <Button className="Action_btn" variant="contained" onClick={createPost}>
           button
+        </Button>
+        <Button className="Action_btn" variant="contained" onClick={Createalbums}>
+          createAlbum
         </Button>
       </div>
       <div className="searchBox" >

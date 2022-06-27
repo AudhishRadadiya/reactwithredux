@@ -30,3 +30,36 @@ query posts($options: PageQueryOptions) {
   }
 }
 `;
+
+export const GET_ALLALBUMS = gql`
+query albums($options: PageQueryOptions){
+    albums(options: $options){
+        data{
+            id
+            title
+            user{
+                id 
+                name
+                username
+                email
+            }
+
+        }
+    } 
+}
+`;
+
+export const GETALBUM = gql`
+query album($id: ID!){
+    album(id: $id){
+        id
+        title
+        user{
+            id
+            name 
+            username
+            email
+        }
+    }
+}
+`

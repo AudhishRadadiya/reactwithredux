@@ -50,9 +50,9 @@ const Submodel = (props) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <TextField id="id" label="id" variant="standard" value={update.id} disabled/>
-          {/* <TextField id="userId" label="userId" variant="standard" value={update.user.id} disabled/> */}
-          <TextField id="title" label="title" variant="standard" value={update.title} onChange={(e) => handleChange(e)} />
+          <TextField id="id" label="id" variant="standard" value={update.id} disabled/><br/>
+          <TextField id="userId" label="userId" variant="standard" value={update.user?.id} disabled/><br/>
+          <TextField id="title" label="title" variant="standard" value={update.title} onChange={(e) => handleChange(e)} /><br/>
           <TextField id="body" label="body" variant="standard" value={update.body} onChange={(e) => handleChange(e)} />
           <Button variant="contained" onClick={() => updateRecord(update)}>
               Update
