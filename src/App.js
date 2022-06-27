@@ -13,8 +13,7 @@ export const App = () => {
     edit, 
     setEdit,
   }
-
-  console.log("provider")
+  
   return (
     <>
       <modelContext.Provider value={modelValue}> 

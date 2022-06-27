@@ -10,14 +10,23 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 // import { useHistory } from "react-router-dom";
 import { GETALLPOSTS } from './query';
-import { useQuery, gql } from '@apollo/client';
+import { useMutation, useQuery, gql } from '@apollo/client';
 import client from './Helper';
-import Model from '../Model';
+import Submodel from '../Submodel';
 import { useDispatch } from "react-redux";
 import { MODEL_OPEN, MODEL_EDIT } from "../redux/types";
+// import {  } from '@apollo/client';
+import { CREATEPOST, UPDATEDATA, DELETE_DATA } from "../graphql/mutation";
 
 
 function GraphPage() {
+  // const [formdata, setFormdata] = useState({
+  //   title: "",
+  //   body: ""
+  // })
+  const [update, setUpdate] = useState({})
+
+  // const { body, title } = update;
 
   const { data } = useQuery(GETALLPOSTS, {
     variables: {
@@ -30,23 +39,100 @@ function GraphPage() {
     },
   });
 
-  console.log("allPosts", data?.posts);
+  console.log("data....",data)
+
+  const [createPost, { data: createPosts }] = useMutation(CREATEPOST, {
+    variables: {
+      input: {
+        title: update.title,
+        body: update.body
+      }
+    }
+  })
+
+  const [updatePost, { data: updatePosts }] = useMutation(UPDATEDATA)
+
+  // {
+  //   variables: {
+  //     id: update.id,
+  //     input: {
+  //       title: update.title,
+  //       body: update.body
+  //     }
+  //   }
+  // }
+  
+  const [deletePost, { data: deletePosts }] = useMutation(DELETE_DATA)
+
   const dispatch = useDispatch();
 
   const handleOpen = () => {
-    dispatch({ type:MODEL_OPEN , payload: true})
+    dispatch({ type: MODEL_OPEN, payload: true })
   }
   const handleClose = () => {
-    dispatch({ type:MODEL_OPEN , payload: false})
+    dispatch({ type: MODEL_OPEN, payload: false })
   }
 
   const handleEdit = (item) => {
     handleOpen()
-    dispatch({ type: MODEL_EDIT, payload: item})
+    dispatch({ type: MODEL_EDIT, payload: item })
+  }
+
+  const deletePostById = (id) => {
+    deletePost(
+      {
+        variables : {
+          id
+        }
+      }
+    )
+  }
+
+  // const updatePostById = (data) => {
+  //   console.log("dddsdsdsd", data);
+  //   try { 
+  //     client
+  //       .mutate({
+  //         mutation: UPDATEDATA,
+  //         variables: {
+  //           id: data.id,
+  //           input: {
+  //             title: data.title,
+  //             body: data.body
+  //           }
+  //         },
+  //       }).then((res) => {
+  //         console.log("resssss", res);
+  //       })
+  //   } catch (error) {
+  //     console.log("update error", error);
+  //   }
+  // }
+
+  const updateRecord = (update) => {
+    setUpdate(update);
+    handleClose();
+    updatePost(
+     {
+       variables: {
+        id: update.id,
+        input: {
+          title: update.title,
+          body: update.body
+        }
+      }
+     }
+    )
+   // updatePostById(update)
   }
 
   return (
     <>
+      <div>
+        <Button className="Action_btn" variant="contained" onClick={createPost}>
+          button
+        </Button>
+      </div>
       <div className="searchBox" >
         <TextField label="search" id="search" variant="standard" />
       </div>
@@ -64,10 +150,9 @@ function GraphPage() {
           <TableBody>
             {!data ?
               (
-                <TableRow>                 
-                    No Data Found!                  
+                <TableRow>
+                  No Data Found!
                 </TableRow>
-
               ) :
               <>
                 {
@@ -88,7 +173,7 @@ function GraphPage() {
                           <Button className="Action_btn" variant="contained" color="success" onClick={() => handleEdit(item)}>
                             Edit
                           </Button>
-                          <Button className="Action_btn" variant="outlined" color="error">
+                          <Button className="Action_btn" variant="outlined" color="error" onClick={() => deletePostById(item.id)}>
                             Delete
                           </Button>
                         </TableCell>
@@ -105,7 +190,7 @@ function GraphPage() {
         </Table>
       </TableContainer>
 
-      <Model handleClose={handleClose}/>
+      <Submodel handleClose={handleClose} updateRecord={updateRecord} />
 
     </>
   )
